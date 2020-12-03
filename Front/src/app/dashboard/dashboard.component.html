@@ -1,0 +1,222 @@
+<app-navbar></app-navbar>
+<div class="background">
+    <div class="container">
+        <div class="top card">
+            <div *ngIf="!isReady" class="loader">
+                <mat-spinner [diameter]="100" mode="indeterminate"></mat-spinner>
+            </div>
+            <div *ngIf="isReady">
+                <div class="addButton">
+                    <button mat-button color="primary" (click)="newUser()">
+                        <mat-icon>
+                            add
+                        </mat-icon> 
+                    </button>
+                </div>
+                <table mat-table [dataSource]="users" style="margin: 0 auto; width: 100%;">
+                    <ng-container matColumnDef="position">
+                        <th mat-header-cell *matHeaderCellDef> # </th>
+                        <td mat-cell *matCellDef="let user"> {{user.user_id}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Nome </th>
+                        <td mat-cell *matCellDef="let user"> 
+                            <mat-form-field class="example-full-width">
+                                <input matInput [disabled]="!editUsers || !(user.user_id == editedUser)" [(ngModel)]="user.name"/> 
+                            </mat-form-field>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="phone">
+                        <th mat-header-cell *matHeaderCellDef> Telefone </th>
+                        <td mat-cell *matCellDef="let user">
+                            <mat-form-field class="example-full-width">
+                                <input matInput [disabled]="!editUsers || !(user.user_id == editedUser)" [(ngModel)]="user.phone"/> 
+                            </mat-form-field></td>
+                    </ng-container>
+                    <ng-container matColumnDef="office">
+                        <th mat-header-cell *matHeaderCellDef> Cargo </th>
+                        <td mat-cell *matCellDef="let user"> 
+                            <mat-form-field class="example-full-width">
+                                <input matInput [disabled]="!editUsers || !(user.user_id == editedUser)" [(ngModel)]="user.office"/> 
+                            </mat-form-field>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="department">
+                        <th mat-header-cell *matHeaderCellDef> Departamento </th>
+                        <td mat-cell *matCellDef="let user">
+                            <mat-form-field class="example-full-width">
+                                <mat-select [(ngModel)]="user.fk_department" [disabled]="!editUsers || !(user.user_id == editedUser)">
+                                    <mat-option *ngFor="let department of departments" [value]="department.department_id" >
+                                        {{department.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                    </ng-container>
+                    <ng-container class="actions" matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef> Ações </th>
+                        <td class="actions" mat-cell *matCellDef="let user">
+                            <div class="separador" *ngIf="user.department">
+                                <mat-icon *ngIf="!editUsers || !(user.user_id == editedUser)" (click)="editUser(user.user_id)">
+                                    edit
+                                </mat-icon>
+                                <mat-icon *ngIf="editUsers && user.user_id == editedUser" class="done-icon" (click)="updateUser(user.user_id, user.name, user.phone, user.office, user.fk_department)">
+                                    done
+                                </mat-icon>
+                                <mat-icon class="clear-icon" (click)="deleteUser(user.user_id)">
+                                    clear
+                                </mat-icon> 
+                            </div>
+                            <div class="separador" *ngIf="!user.department">
+                                <mat-icon *ngIf="!addUser" (click)="addUser = true; editUser(user.user_id)">
+                                    edit
+                                </mat-icon>
+                                <mat-icon *ngIf="addUser" class="done-icon" (click)="createUser(
+                                    user.user_id, user.name, user.phone, user.office, user.fk_department, ''
+                                )">
+                                    done
+                                </mat-icon>
+                                <mat-icon class="clear-icon" (click)="cancelAddUser(user.user_id)">
+                                    clear
+                                </mat-icon> 
+                            </div>
+                            
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsUsers"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsUsers;"></tr>
+                    
+                </table>
+            </div>
+        </div>
+        <div class="bottom-l card">
+            <div *ngIf="!isReady" class="loader">
+                <mat-spinner [diameter]="100" mode="indeterminate"></mat-spinner>
+            </div>
+            <div *ngIf="isReady">
+                <div class="addButton">
+                    <button mat-button color="primary" (click)="newDepartment()">
+                        <mat-icon>
+                            add
+                        </mat-icon> 
+                    </button>
+                </div>
+                <table mat-table [dataSource]="departments" style="margin: 0 auto; width: 100%;">
+                    <ng-container matColumnDef="position">
+                        <th mat-header-cell *matHeaderCellDef> # </th>
+                        <td mat-cell *matCellDef="let department"> {{department.department_id}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Departamento </th>
+                        <td mat-cell *matCellDef="let department" > 
+                            <mat-form-field class="example-full-width">
+                                <input matInput [disabled]="!editDepartments || !(department.department_id == editedDepartments)" [(ngModel)]="department.name"/> 
+                            </mat-form-field>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="costCenter">
+                        <th mat-header-cell *matHeaderCellDef> Centro de custo </th>
+                        <td mat-cell *matCellDef="let department">
+                            <mat-select [(ngModel)]="department.fk_costcenter" [disabled]="!editDepartments || !(department.department_id == editedDepartments)">
+                                <mat-option *ngFor="let costcenter of costCenters" [value]="costcenter.costcenter_id" >
+                                    {{costcenter.name}}
+                                </mat-option>
+                            </mat-select>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Ações </th>
+                        <td class="actions" mat-cell *matCellDef="let department"> 
+                            <div class="separador" *ngIf="department.costcenter">
+                                <mat-icon *ngIf="!editDepartments || !(department.department_id == editedDepartments)" (click)="editDepartment(department.department_id)">
+                                    edit
+                                </mat-icon>
+                                <mat-icon *ngIf="editDepartments && department.department_id == editedDepartments" class="done-icon" (click)="updateDepartment(department.department_id, department.name, department.fk_costcenter)">
+                                    done
+                                </mat-icon>
+                                <mat-icon class="clear-icon" (click)="deleteDepartment(department.department_id)">
+                                    clear
+                                </mat-icon>
+                            </div>
+                            <div class="separador" *ngIf="!department.costcenter">
+                                <mat-icon *ngIf="!addDepartment" (click)="addDepartment = true; editDepartment(department.department_id)">
+                                    edit
+                                </mat-icon>
+                                <mat-icon *ngIf="addDepartment" class="done-icon" (click)="createDepartment(
+                                    department.department_id, department.name, department.fk_costCenter, ''
+                                )">
+                                    done
+                                </mat-icon>
+                                <mat-icon class="clear-icon" (click)="cancelAddDepartment(department.department_id)">
+                                    clear
+                                </mat-icon> 
+                            </div>
+                            
+                        </td>
+                    </ng-container>
+                    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsDepartments"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsDepartments;"></tr>
+                    
+                </table>
+            </div>
+        </div>
+        <div class="bottom-r card">
+            <div *ngIf="!isReady" class="loader">
+                <mat-spinner [diameter]="100" mode="indeterminate"></mat-spinner>
+            </div>
+            <div *ngIf="isReady">
+                <div class="addButton">
+                    <button mat-button color="primary" (click)="newCostCenter()">
+                        <mat-icon>
+                            add
+                        </mat-icon> 
+                    </button>
+                </div>
+                <table mat-table [dataSource]="costCenters" style="margin: 0 auto; width: 100%;">
+                    <ng-container matColumnDef="position">
+                        <th mat-header-cell *matHeaderCellDef> # </th>
+                        <td mat-cell *matCellDef="let costCenter"> {{costCenter.costcenter_id}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Centro de custo </th>
+                        <td mat-cell *matCellDef="let costCenter">
+                            <mat-form-field class="example-full-width">
+                                <input matInput [disabled]="!editCostCenters || !(costCenter.costcenter_id == editedCostCenters)" [(ngModel)]="costCenter.name"/>
+                            </mat-form-field> 
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Ações </th>
+                        <td class="actions" mat-cell *matCellDef="let costCenter">
+                            <div *ngIf="!creatingCostCenter" class="separador">
+                                <mat-icon *ngIf="!editCostCenters || !(costCenter.costcenter_id == editedCostCenters)" (click)="editCostCenter(costCenter.costcenter_id)">
+                                    edit
+                                </mat-icon>
+                                <mat-icon *ngIf="editCostCenters && costCenter.costcenter_id == editedCostCenters" class="done-icon" (click)="updateCostCenter(costCenter.costcenter_id, costCenter.name)">
+                                    done
+                                </mat-icon>
+                                <mat-icon class="clear-icon" (click)="deleteCostCenter(costCenter.costcenter_id)">
+                                    clear
+                                </mat-icon>
+                            </div>
+                            <div *ngIf="creatingCostCenter" class="separador">
+                                <mat-icon *ngIf="!editCostCenters || !(costCenter.costcenter_id == editedCostCenters)" (click)="editCostCenter(costCenter.costcenter_id)">
+                                    edit
+                                </mat-icon>
+                                <mat-icon *ngIf="editCostCenters && costCenter.costcenter_id == editedCostCenters" class="done-icon" (click)="createCostCenter(costCenter.costcenter_id, costCenter.name)">
+                                    done
+                                </mat-icon>
+                                <mat-icon class="clear-icon" (click)="cancelAddCostCenter(costCenter.costcenter_id)">
+                                    clear
+                                </mat-icon>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsCostCenter"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsCostCenter;"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

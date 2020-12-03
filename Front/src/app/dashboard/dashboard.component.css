@@ -1,0 +1,101 @@
+
+.background {
+    width: 100%;
+    height: 100%;
+    background: #b1becc;
+}
+
+.container {
+    padding-top: 3rem;
+    width: 1200px;
+    display: grid;
+    margin: 0 auto;
+    align-items: center;
+    grid-gap: 5rem;
+    grid-template-areas: 
+    "top top"
+    "bottom-l bottom-r";
+}
+
+.top {
+    grid-area: top;
+}
+
+.bottom-l {
+    grid-area: bottom-l;
+}
+
+.bottom-r {
+    grid-area: bottom-r;
+}
+
+.card {
+    border: 1px solid rgb(235, 242, 255);
+    border-radius: 8px;
+    width: 100%;
+    height: 250px;
+    max-height: 250px;
+    overflow-y: auto;
+    margin: 0 auto;
+    padding: 1rem;
+    background: rgb(235, 242, 255);
+}
+
+/* table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+} */
+
+u {
+    font-size: 18px;
+}
+
+.actions{
+    display: flex;
+    justify-content: space-around;
+    height: inherit;
+    align-items: center;
+    margin-top: 15px;
+}
+
+table{
+    background: rgb(235, 242, 255);
+}
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell{
+    text-align: center;
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    text-align: unset;
+}
+
+.addButton{
+    text-align: end;
+}
+
+.clear-icon{
+    color: red;
+}
+
+.done-icon{
+    color: green;
+}
+
+td.mat-cell:last-of-type{
+    padding-right: 0px;
+}
+
+.separador{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.loader{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}

@@ -1,0 +1,8 @@
+.content{
+    flex-direction: row;
+    display: flex;
+    place-content: space-between;
+    padding-left: 5%;
+    padding-right: 5%;
+    align-items: end;
+}
