@@ -1,6 +1,6 @@
 # Teste_IPDV
 
-Teste referente a vaga de Desenvolvedor FullStack na empresa IPDV.
-Para inicializar a aplicação :
-  -ng serve (app)
-  -npm start (api)
+Teste referente a vaga de Desenvolvedor FullStack na empresa IPDV Online.<br>
+Para inicializar a aplicação :<br>
+  -ng serve (app)<br>
+  -npm start (api)<br>
